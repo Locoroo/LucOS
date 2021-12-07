@@ -21,3 +21,5 @@ Useful Links:
 Two types of Slash commands
     Guild Based - Only visible to a specific guild
     Global - Available to all Servers
+
+TESTINGGGGGGGGGGGGGG
