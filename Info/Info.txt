@@ -13,6 +13,11 @@ GitHub:
 git config --global user.email "giangabriels@gmail.com"
 git config --global user.name "Locoroo"
 
+Update Steps:
+git add *
+git commit -m "<message>"
+git push
+
 Add Link: https://discord.com/api/oauth2/authorize?client_id=916166557070147594&permissions=8&scope=bot%20applications.commands
 
 To Run the Bot: `npm run dev`
