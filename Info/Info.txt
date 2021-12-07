@@ -7,7 +7,9 @@ Install command:
 
 GitHub:
 1. Install http://git-scm.com/
-2. F1| Change default Terminal profile to Git with select default profile
+
+git config --global user.email "giangabriels@gmail.com"
+git config --global user.name "Locoroo"
 
 Add Link: https://discord.com/api/oauth2/authorize?client_id=916166557070147594&permissions=8&scope=bot%20applications.commands
 
@@ -21,5 +23,3 @@ Useful Links:
 Two types of Slash commands
     Guild Based - Only visible to a specific guild
     Global - Available to all Servers
-
-TESTINGGGGGGGGGGGGGG
