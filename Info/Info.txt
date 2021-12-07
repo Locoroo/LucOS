@@ -1,0 +1,23 @@
+Install command:
+1. `npm init -y`
+2. `npm install discord.js dotenv`
+3. `npm install -g typescript ts-node`
+4. `tsc -init`
+5. `npm install mongoose@latest`
+
+GitHub:
+1. Install http://git-scm.com/
+2. F1| Change default Terminal profile to Git with select default profile
+
+Add Link: https://discord.com/api/oauth2/authorize?client_id=916166557070147594&permissions=8&scope=bot%20applications.commands
+
+To Run the Bot: `npm run dev`
+
+Useful Links:
+    Intents Calculator: https://ziad87.net/intents/
+    WOKCommands: https://docs.wornoffkeys.com
+    Repl.it: https://dev.to/fizal619/so-you-want-to-make-a-discord-bot-4f0n
+
+Two types of Slash commands
+    Guild Based - Only visible to a specific guild
+    Global - Available to all Servers
