@@ -5,6 +5,8 @@ Install command:
 4. `tsc -init`
 5. `npm install mongoose@latest`
 
+- npm install -D typescript
+
 GitHub:
 1. Install http://git-scm.com/
 
