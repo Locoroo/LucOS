@@ -47,11 +47,6 @@ client.on('ready', () => {
         // [1] Furiends Server
         // [2] The Birds Server
         // [3] don't know Server
-        // Mongoose Database
-        // mongoUri: process.env.MONGO_URI,
-        // dbOptions: {
-        //     keepAlive: true
-        // },
         // Bot Owner ID
         botOwners: ['270600189859856385'],
         // Disabled Default Commands
