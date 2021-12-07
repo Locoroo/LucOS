@@ -4,6 +4,14 @@ import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req: any, res: any) => res.send('Hello World!'));
+
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+
 // Intents tells Discord what information it needs to use.
 const client = new DiscordJS.Client({
     intents: [
