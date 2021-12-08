@@ -4,6 +4,7 @@ import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const Database = require("@replit/database");
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -30,12 +31,8 @@ client.on('ready', () => {
         typeScript: true,
 
         // Test Servers ID
-        testServers: ['498938933707800600', '809912783620931625', '885516509357686795', '568905801817653273'],
-            // [0] LucOS HQ Server
-            // [1] Furiends Server
-            // [2] The Birds Server
-            // [3] don't know Server
-
+        testServers: ['498938933707800600'],
+   
         // Bot Owner ID
         botOwners: ['270600189859856385'],
 
