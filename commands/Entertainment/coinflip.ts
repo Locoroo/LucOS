@@ -1,5 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
 import { ICommand } from "wokcommands";
+const Database = require("@replit/database")
+const db = new Database()
 
 export default {
     // Information about the command.
@@ -10,29 +12,56 @@ export default {
     testOnly: true,
 
     // Function that runs whenever the command is ran
-    callback: ({ interaction }) => {
+    callback: async ({ interaction, guild }) => {
 
-        let timesFlipped = 0;
-        let timesLandedHeads = 0;
-        let timesLandedTails = 0;
+        let data = await db.get(`Flip_${interaction.guild?.id}`);
+        
+        let flip;
+        
+        if (data === null) {
+            flip = {
+                heads: 0,
+                tails: 0
+            }
+            console.log(`${flip} IS NULL`);
+        } else {
+            flip = JSON.parse(data);
+        }
 
+        // Random Number between 1 and 2
+        const max = 2;
+        const result = Math.floor(Math.random() * max + 1);
+
+        switch (result) {
+            case 1: {
+                flip.tails = flip.tails + 1
+                break;
+            }
+            case 2: {
+                flip.heads = flip.heads + 1
+                break;
+            }
+        }
+        
+        let flipTotal = flip.heads + flip.tails;
+
+        // Create Embeds
         const tailsEmbed = new MessageEmbed()
             .setTitle(`${interaction.user.username} flipped a coin!`)
             .setColor('LIGHT_GREY')
             .setDescription('Coin landed on: **TAILS**')
             .setThumbnail('https://i.imgur.com/mdLEHjx.png')
-            .setFooter(`Heads: ${timesLandedHeads}      |       Tails: ${timesLandedTails}      |       Total Flips: ${timesFlipped}`)
+            .setFooter(`Heads: ${flip.heads}      |       Tails: ${flip.tails}      |       Total Flips: ${flipTotal}`)
         
         const headsEmbed = new MessageEmbed()
             .setTitle(`${interaction.user.username} flipped a coin!`)
             .setColor('GOLD')
             .setDescription('Coin landed on: **HEADS**')
             .setThumbnail('https://i.imgur.com/GXl4S9N.png')
-            .setFooter(`Heads: ${timesLandedHeads}      |       Tails: ${timesLandedTails}      |       Total Flips: ${timesFlipped}`)
+            .setFooter(`Heads: ${flip.heads}      |       Tails: ${flip.tails}      |       Total Flips: ${flipTotal}`)
 
-            const max = 2;
-            const result = Math.floor(Math.random() * max + 1);
-
+            
+        // Send Results
         switch (result) {
             case 1: {
                 interaction.reply({
@@ -47,6 +76,12 @@ export default {
                 break;
             }
         }
+        // Save it back to the Database
+        const savedData = JSON.stringify(flip);
+        await db.set(`Flip_${interaction.guild?.id}`, `${savedData}`);
+        
+        
+
     },
 
 } as ICommand
