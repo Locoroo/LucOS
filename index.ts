@@ -34,7 +34,7 @@ client.on('ready', () => {
         testServers: ['498938933707800600'],
    
         // Bot Owner ID
-        botOwners: ['270600189859856385'],
+        botOwners: ['270600189859856385', '543932447751143443'],
 
         // Disabled Default Commands
         disabledDefaultCommands: [
