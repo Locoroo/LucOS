@@ -1,4 +1,4 @@
-import DiscordJS, { Intents, Interaction } from 'discord.js'
+import DiscordJS, { Client, Intents, Interaction } from 'discord.js'
 import WOKCommands from 'wokcommands'
 import path from 'path'
 import dotenv from 'dotenv'
@@ -21,6 +21,17 @@ const client = new DiscordJS.Client({
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS
     ]
 })
+
+
+client.user?.setPresence({
+    status: 'dnd',
+    activities: [
+    {
+        name: 'Testing',
+    },
+    ],
+})
+  
 
 // Specify what to do when the bot is ready.
 client.on('ready', () => {
