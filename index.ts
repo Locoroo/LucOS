@@ -21,17 +21,7 @@ const client = new DiscordJS.Client({
         Intents.FLAGS.GUILD_MESSAGE_REACTIONS
     ]
 })
-
-
-client.user?.setPresence({
-    status: 'dnd',
-    activities: [
-    {
-        name: 'Testing',
-    },
-    ],
-})
-  
+ 
 
 // Specify what to do when the bot is ready.
 client.on('ready', () => {
@@ -45,7 +35,7 @@ client.on('ready', () => {
         testServers: ['498938933707800600'],
    
         // Bot Owner ID
-        botOwners: ['270600189859856385'],
+        botOwners: ['270600189859856385', '386385894686326784'],
 
         // Disabled Default Commands
         disabledDefaultCommands: [

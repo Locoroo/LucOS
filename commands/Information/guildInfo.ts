@@ -8,6 +8,7 @@ export default {
     description: 'Displays information about the server.',
 
     slash: true,
+    guildOnly: true,
     
     // Function that runs whenever the command is ran
     callback: ({ interaction, guild }) => {

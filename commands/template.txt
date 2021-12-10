@@ -1,0 +1,36 @@
+import { } from "discord.js";
+import { ICommand } from "wokcommands";
+
+export default {
+
+    // Command Config
+    category: 'Category',
+    description: 'Description',
+
+    hidden: false,
+    ownerOnly: false,
+    testOnly: true,
+    guildOnly: false,
+    slash: true,
+    
+    // expectedArgs: '',
+    // minArgs: 0,
+    // maxArgs: 0,
+       
+    // permissions: ['ADMINISTRATOR'],
+    
+    // cooldown: '60s',
+    // globalCooldown: '10m',
+
+    // options: [],
+
+    // error: ({ error, command, message, info }) => {},
+
+    // Command Actions
+    callback: ({ interaction }) => {
+        // channel, args, text, client, prefix, instance, message
+
+
+    },
+
+} as ICommand

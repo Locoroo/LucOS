@@ -9,6 +9,7 @@ export default {
     description: 'Shows your account balance status.',
 
     slash: true,
+    guildOnly: true,
     testOnly: true,
 
     // Function that runs whenever the command is ran

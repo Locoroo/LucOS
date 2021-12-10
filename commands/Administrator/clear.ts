@@ -14,6 +14,7 @@ export default {
     expectedArgs: '[amount]',
 
     slash: true,
+    guildOnly: true,
 
     // Function that runs whenever the command is ran
     callback: async ({ interaction, channel, args }) => {
