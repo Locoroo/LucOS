@@ -11,7 +11,6 @@ export default {
     slash: true,
     testOnly: true,
     ownerOnly: true,
-    hidden: true,
 
     // Function that runs whenever the command is ran
     callback: async ({ interaction, client }) => {

@@ -7,7 +7,6 @@ export default {
     category: 'Category',
     description: 'Description',
 
-    hidden: false,
     ownerOnly: false,
     testOnly: true,
     guildOnly: false,

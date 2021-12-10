@@ -17,14 +17,13 @@ const setStatus = (client: Client, status: string) => {
 export default {
   
   category: 'Configuration',
-  description: 'Updates the status for the bot',
+  description: ' ',
 
   minArgs: 1,
   expectedArgs: '<status>',
   
+  testOnly: true,
   ownerOnly: true,
-  hidden: true,
-
   slash: true,
 
   init: async (client: Client) => {

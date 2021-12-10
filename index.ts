@@ -39,7 +39,7 @@ client.on('ready', () => {
 
         // Disabled Default Commands
         disabledDefaultCommands: [
-            'language',
+            'languaje',
             'prefix',
             'requiredrole',
             'channelonly',
@@ -51,25 +51,7 @@ client.on('ready', () => {
     .setDefaultPrefix('-')
     
     .setCategorySettings([
-        {
-            name: 'Testing',
-            emoji: '🔧',
-            hidden: true
-        },
-        {
-            name: 'Information',
-            emoji: '📋'
-        },
-        {
-            name: 'Configuration',
-            emoji: '⚙️',
-            hidden: true
-        },
-        {
-            name: 'Administrator',
-            emoji: '👑',
-            hidden: true
-        },
+        // Set Categories for the built in help menu when most commands are done.
     ])
 })
 
