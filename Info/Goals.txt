@@ -22,11 +22,12 @@
 [ ] Say command
 
 [X] Coin Flip
-    [ ] Store information on how many flips have ocurred
+    [X] Store information on how many flips have ocurred
 
 [ ] Make Basic Admin commands
     [ ] Ban
     [ ] Kick
+    [ ] Make them be logged in a channel named 'logs'
 
 [ ] Make an Economy System
     [ ] Credits Balance

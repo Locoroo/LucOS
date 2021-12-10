@@ -9,6 +9,8 @@ export default {
 
     slash: true,
     guildOnly: true,
+
+    cooldown: '5s',
     
     // Function that runs whenever the command is ran
     callback: ({ interaction, guild }) => {
