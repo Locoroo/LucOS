@@ -8,8 +8,9 @@ export default {
     category: 'Entertainment',
     description: 'Flip a Coin!',
 
+    cooldown: '2s',
+
     slash: true,
-    testOnly: true,
 
     // Function that runs whenever the command is ran
     callback: async ({ interaction, guild }) => {
@@ -23,7 +24,6 @@ export default {
                 heads: 0,
                 tails: 0
             }
-            console.log(`${flip} IS NULL`);
         } else {
             flip = JSON.parse(data);
         }
@@ -80,8 +80,6 @@ export default {
         const savedData = JSON.stringify(flip);
         await db.set(`Flip_${interaction.guild?.id}`, `${savedData}`);
         
-        
-
     },
 
 } as ICommand

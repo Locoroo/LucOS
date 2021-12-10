@@ -32,7 +32,8 @@ export default {
 
       console.log(await db.list());
       interaction.reply({
-        content:'Printed to the console.'
+        content:'Printed to the console.',
+        ephemeral: true,
       })
 
     },

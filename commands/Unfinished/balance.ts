@@ -14,34 +14,39 @@ export default {
 
     // Function that runs whenever the command is ran
     callback: async ({ interaction, client }) => {
-        
+       
       let currencyIcon = `<:Credits:918484129153187881>`
 
-      // Get Balance Values from Database
-      let balance = await db.get(`wallet_${interaction.user.id}`);
-      let bank = await db.get(`bank_${interaction.user.id}`);
+      let data = await db.get(`Credits_${interaction.user?.id}`);
         
+      let credits;
+        
+      if (data === null) {
+          credits = {
+              balance: 500,
+              bank: 0
+          }
+      } else {
+          credits = JSON.parse(data);
+      }
 
-      if (balance === null) {
-        balance = 500;
-        }
-      if (bank === null) {
-        bank = 0;
-        }
         
       const embed = new MessageEmbed()
         .setTitle(`${interaction.user.username}'s Account Balance:`)
         .addFields([
           {
             name: 'Balance:',
-            value: `${currencyIcon} ${balance}`
+            value: `${currencyIcon} ${credits.balance}`,
+            inline: true
           },
           {
             name: 'Bank:',
-            value: `${currencyIcon} ${bank}`
+            value: `${currencyIcon} ${credits.bank}`,
+            inline: true
           }
         ])
         .setColor('GOLD')
+        .setThumbnail('https://i.imgur.com/aUckj2T.jpg')
         .setTimestamp(Date.now())
 
         
@@ -51,9 +56,8 @@ export default {
 
 
       // Save it back to the Database
-      await db.set(`wallet_${interaction.user.id}`, balance);
-      await db.set(`bank_${interaction.user.id}`, bank);
-
+      const savedData = JSON.stringify(credits);
+      await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
     },
 
 } as ICommand

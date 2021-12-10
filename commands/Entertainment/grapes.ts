@@ -6,6 +6,8 @@ export default {
     category: 'Misc',
     description: 'Grapes.',
 
+    cooldown: '3s',
+
     // Function that runs whenever the command is ran
     callback: ({ message, text }) => {
 
