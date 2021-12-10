@@ -39,11 +39,12 @@ client.on('ready', () => {
 
         // Disabled Default Commands
         disabledDefaultCommands: [
-            'languaje',
+            'language',
             'prefix',
             'requiredrole',
             'channelonly',
-            'command'
+            'command',
+            'help'
         ]
     })
 
