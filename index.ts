@@ -4,14 +4,12 @@ import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
 
-const Database = require("@replit/database");
 const express = require('express');
 const app = express();
 const port = 3000;
 
-app.get('/', (req: any, res: any) => res.send('Hello World!'));
-
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+app.get('/', (req: any, res: any) => res.send('Bot is up and running!'));
+app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
 
 // Intents tells Discord what information it needs to use.
 const client = new DiscordJS.Client({
@@ -49,15 +47,13 @@ client.on('ready', () => {
     })
 
     .setDefaultPrefix('-')
-    
-    .setCategorySettings([
-        // Set Categories for the built in help menu when most commands are done.
-    ])
+
 })
 
 // Whenever an interaction occurs, run this:
 client.on('interactionCreate', interaction => {
-    console.log(`[SlashCMD] ${Date()} | ${interaction.user.tag} used an interaction at "${interaction.guild?.name}" in ChID: ${interaction.channelId}`)
+    const channel = interaction.guild?.channels.cache.get(`${interaction?.channelId}`);
+    console.log(`[SlashCMD] ${Date()} | ${interaction.user.tag} used an interaction at "${interaction.guild?.name}" in #${channel?.name}`)
 })
 
 // Log in.

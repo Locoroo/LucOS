@@ -25,15 +25,17 @@ export default {
                 },
                 {
                     name: 'Information Commands:',
-                    value: `**/botInfo** - Displays information about the bot itself.
-                    **/guildInfo** - Displays information about the server you\'re in.`
+                    value: `**/help** - The command you just used...
+                    **/botInfo** - Displays information about the bot itself.
+                    **/guildInfo** - Displays information about the server you\'re in.
+                    **/avatar <user>** - Displays a specific user's avatar. Leave blank to show your own avatar.`
                 },
                 {
                     name: 'Moderation Commands:',
                     value: `**/clear <amount>** - Clears a specific amount of messages in a channel.`
                 }
             ])
-            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/10/21')
+            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/11/21')
         
         interaction.reply({
             embeds: [embed],

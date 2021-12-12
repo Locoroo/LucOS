@@ -14,19 +14,19 @@ export default {
     // Function that runs whenever the command is ran
     callback: ({ interaction, client }) => {
 
-        const isBot = client.user?.bot
-        let x;
+        // const isBot = client.user?.bot
+        // let x;
 
-        switch (isBot) {
-            case true: {
-                x = 'Yes, I am'
-                break;
-            }
-            case false: {
-                x = 'No, I\'m not.'
-                break;
-            }
-        }
+        // switch (isBot) {
+        //     case true: {
+        //         x = 'Yes, I am'
+        //         break;
+        //     }
+        //     case false: {
+        //         x = 'No, I\'m not.'
+        //         break;
+        //     }
+        // }
 
         function timeInSeconds (ms: any) {
             return ms / 1000
@@ -68,8 +68,8 @@ export default {
                     inline: true
                 },
                 {
-                    name: 'Am I a Bot?',
-                    value: `${x}`,
+                    name: 'Online on:',
+                    value: `${client.guilds?.cache.size} servers`,
                     inline: true
                 },
                 {
