@@ -26,7 +26,9 @@ export default {
         interaction.reply({
             content: `Deleted ${amount} message(s).`  
         })
-        console.log(`[SlashCMD] ${Date()} | ${interaction.user.tag} cleared ${amount} message(s) at "${interaction.guild?.name}" in ChID: ${interaction.channelId}`)
+        const today = new Date();
+        const time = `${today.getHours()}:${today.getMinutes()} - ${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+        console.log(`[SlashCMD] ${time} | ${interaction.user.tag} cleared ${amount} message(s) at "${interaction.guild?.name}" in ChID: ${interaction.channelId}`)
         setTimeout(() => {
             interaction.deleteReply()
         }, 5000)

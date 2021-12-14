@@ -24,6 +24,8 @@ export default {
 
       if (data === null) {
           acc = {
+              name: interaction.user.username,
+              id: interaction.user?.id,
               balance: 500,
               bank: 0
           }
@@ -32,9 +34,13 @@ export default {
       }
 
       let credits = {
+        name: acc.name,
+        id: acc.id,
         balance: acc.balance,
         bank: acc.bank
       }
+
+      console.log(credits);
 
       // Function to make Buttons quicker
       function newButton(id: string, label: string, style: any, disabled = false) {
@@ -57,19 +63,20 @@ export default {
         const bankerRow = new MessageActionRow().addComponents(
           newButton('add10', `+10`, 'PRIMARY'),
           newButton('add100', `+100`, 'PRIMARY'),
-          newButton('cancel', `Back`, 'DANGER'),
           newButton('take100', `-100`, 'PRIMARY'),
-          newButton('take10', `-10`, 'PRIMARY')
+          newButton('take10', `-10`, 'PRIMARY'),
+          newButton('cancel2', `Back`, 'DANGER')
         );
 
       let mainMenu;
       let depEmbed;
       let withEmbed;
+      let bankerEmbed
 
       // Embeds
       function createEmbed(bal: number, bank: number, color: any = "GOLD", footer = 'Select an option if you would like to manage your balance.') { 
         return new MessageEmbed()
-        .setTitle(`${interaction.user.username}'s Account Balance:`)
+        .setTitle(`${credits.name}'s Account Balance:`)
         .addFields([
           {
             name: 'Balance:',
@@ -89,7 +96,7 @@ export default {
       }
       function createDepEmbed(bal: number, bank: number, color: any = "GOLD", footer = 'Select the amount you would like to deposit.') {
         return new MessageEmbed()
-        .setTitle(`${interaction.user.username}'s Account Balance:`)
+        .setTitle(`${credits.name}'s Account Balance:`)
         .setDescription('Deposit Mode:')
         .addFields([
           {
@@ -110,6 +117,27 @@ export default {
         ])
         .setColor(color)
         .setThumbnail('https://i.imgur.com/2dkYofN.png')
+        .setFooter(footer)
+        .setTimestamp(Date.now())
+      }
+      function createBankerEmbed(bal: number, color: any = "ORANGE", footer = 'Select how much you want to take or add.') {
+        return new MessageEmbed()
+        .setTitle(`${credits.name}'s Account Balance:`)
+        .setDescription('Banker Mode: _Only the Bot Owner can access this._')
+        .addFields([
+          {
+            name: 'Balance:',
+            value: `${currencyIcon} ${bal}`,
+            inline: true
+          },
+          {
+            name: 'Banker:',
+            value: `Locoroo`!,
+            inline: true
+          }
+        ])
+        .setColor(color)
+        .setThumbnail('https://i.imgur.com/OlP5cAW.png')
         .setFooter(footer)
         .setTimestamp(Date.now())
       }
@@ -141,9 +169,9 @@ export default {
       }
 
       mainMenu = createEmbed(credits.balance, credits.bank)
-        await interaction.reply({
-        components: [defaultMenu],
-        embeds: [mainMenu]
+      await interaction.reply({
+      components: [defaultMenu],
+      embeds: [mainMenu]
       })
 
       // Filter who pressed the button
@@ -158,6 +186,8 @@ export default {
 
       // On collect, run:
       collector.on('collect', async (BtnPressed: MessageComponentInteraction) => {
+
+        console.log(credits);
 
         // Check if they can Deposit or Withdraw
         canDeposit = credits.balance > 0
@@ -216,9 +246,9 @@ export default {
           }
           case 'banker': {
             if (BtnPressed.user.id === '270600189859856385') {
-              mainMenu = createEmbed(credits.balance, credits.bank)
+              bankerEmbed = createBankerEmbed(credits.balance)
               await BtnPressed.update({
-              embeds: [mainMenu],
+              embeds: [bankerEmbed],
               components: [bankerRow]})
             break;
             } else {
@@ -228,8 +258,6 @@ export default {
               components: [menu]})
             break;
             }
-            
-            break;
           }
           case 'cancel': {
             mainMenu = createEmbed(credits.balance, credits.bank)
@@ -257,7 +285,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -286,7 +314,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -315,7 +343,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -346,7 +374,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -375,7 +403,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -404,7 +432,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -420,61 +448,95 @@ export default {
         
         // Banker Row
           case 'add10': {
-            credits.balance = credits.balance + 10;
-            mainMenu = createEmbed(credits.balance, credits.bank);
-            credits.balance + 10;
-            BtnPressed.update({
-              embeds: [mainMenu],
-              components: [bankerRow]
-            })
-            const savedData = JSON.stringify(credits);
-            await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+            if (BtnPressed.user.id === '270600189859856385') {
+              credits.balance = credits.balance + 10;
+              bankerEmbed = createBankerEmbed(credits.balance);
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+              const savedData = JSON.stringify(credits);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
             break;
+            } else {
+              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+            break;
+            }
           }
           case 'add100': {
-            credits.balance = credits.balance + 100;
-            mainMenu = createEmbed(credits.balance, credits.bank);
-            BtnPressed.update({
-              embeds: [mainMenu],
-              components: [bankerRow]
-            })
-            const savedData = JSON.stringify(credits);
-            await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+            if (BtnPressed.user.id === '270600189859856385') {
+              credits.balance = credits.balance + 100;
+              bankerEmbed = createBankerEmbed(credits.balance);
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+              const savedData = JSON.stringify(credits);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
             break;
+            } else {
+              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+            break;
+            }
           }
           case 'take10': {
-            credits.balance = credits.balance - 10;
-            mainMenu = createEmbed(credits.balance, credits.bank);
-            BtnPressed.update({
-              embeds: [mainMenu],
-              components: [bankerRow]
-            })
-            const savedData = JSON.stringify(credits);
-            await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+            if (BtnPressed.user.id === '270600189859856385') {
+              credits.balance = credits.balance - 10;
+              bankerEmbed = createBankerEmbed(credits.balance);
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+              const savedData = JSON.stringify(credits);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
             break;
+            } else {
+              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+            break;
+            }
           }
           case 'take100': {
-            credits.balance = credits.balance - 100;
-            mainMenu = createEmbed(credits.balance, credits.bank);
-            BtnPressed.update({
-              embeds: [mainMenu],
-              components: [bankerRow]
-            })
-            const savedData = JSON.stringify(credits);
-            await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
+            if (BtnPressed.user.id === '270600189859856385') {
+              credits.balance = credits.balance - 100;
+              bankerEmbed = createBankerEmbed(credits.balance);
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+              const savedData = JSON.stringify(credits);
+              await db.set(`Credits_${credits.id}`, `${savedData}`);
             break;
+            } else {
+              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+            break;
+            }
           }
-
+          case 'cancel2': {
+            if (BtnPressed.user.id === '270600189859856385') {
+              mainMenu = createEmbed(credits.balance, credits.bank)
+              await BtnPressed.update({
+              embeds: [mainMenu],
+              components: [menu]
+            })
+            break;
+            } else {
+              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Don\'t do that...')
+              await BtnPressed.update({
+              embeds: [bankerEmbed],
+              components: [bankerRow]})
+            break;
+            }
+          }
         }
       })
-
-      collector.on('end', async (collection) => {
-      console.log(collection);    
-      })
-
-      // Save it back to the Database
-      // const savedData = JSON.stringify(credits);
-      // await db.set(`Credits_${interaction.user?.id}`, `${savedData}`);
     },
 
 } as ICommand

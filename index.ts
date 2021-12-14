@@ -8,8 +8,13 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
-app.get('/', (req: any, res: any) => res.send('Bot is up and running!'));
-app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
+// Start Express Server
+app.get("/", (req: any, res: any) => {
+        res.sendFile(path.join(__dirname + "/express/src/" + "index.html"))
+})
+app.listen(port, () => {
+    console.log(`[EXPRESS]: Listen on port ${port}`)
+})
 
 // Intents tells Discord what information it needs to use.
 const client = new DiscordJS.Client({
@@ -50,10 +55,29 @@ client.on('ready', () => {
 
 })
 
+process.on("unhandledRejection", (reason, p) => {
+    console.log(" [AntiCrash] Unhandled Rejection/Catch");
+    console.log(reason, p);
+});
+process.on("uncaughtException", (err, origin) => {
+    console.log(" [AntiCrash] Uncaught Exception/Catch");
+    console.log(err, origin);
+});
+process.on("uncaughtExceptionMonitor", (err, origin) => {
+    console.log(" [AntiCrash] Uncaught Exception/Catch (MONITOR)");
+    console.log(err, origin);
+});
+process.on("multipleResolves", (type, promise, reason) => {
+    console.log(" [AntiCrash] Multiple Resolves");
+    console.log(type, promise, reason);
+});
+
 // Whenever an interaction occurs, run this:
 client.on('interactionCreate', interaction => {
     const channel = interaction.guild?.channels.cache.get(`${interaction?.channelId}`);
-    console.log(`[SlashCMD] ${Date()} | ${interaction.user.tag} used an interaction at "${interaction.guild?.name}" in #${channel?.name}`)
+    const today = new Date();
+    const time = `${today.getHours()}:${today.getMinutes()} - ${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+    console.log(`[SlashCMD] ${time} | ${interaction.user.tag} used an interaction at "${interaction.guild?.name}" in #${channel?.name}`)
 })
 
 // Log in.
