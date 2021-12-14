@@ -26,6 +26,7 @@ export default {
                 {
                     name: 'Information Commands:',
                     value: `**/help** - The command you just used...
+                    **/invite** - Shows an invite link to invite the bot to your server.
                     **/botInfo** - Displays information about the bot itself.
                     **/guildInfo** - Displays information about the server you\'re in.
                     **/avatar <user>** - Displays a specific user's avatar. Leave blank to show your own avatar.`

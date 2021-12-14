@@ -3,7 +3,7 @@
 [X] Ping Command
     [X] Display latency with the API in ms
 
-[ ] Help command
+[X] Help command
 
 [ ] Profiles
     [ ] User Profile
@@ -11,7 +11,7 @@
     [X] Bot Profile
 
 [X] Avatar Display
-    [ ] Display a specific user's avatar
+    [X] Display a specific user's avatar
 
 [ ] Ghost Ping Notifier
     [ ] Send Notification through DMs
@@ -30,10 +30,12 @@
     [ ] Make them be logged in a channel named 'logs'
 
 [ ] Make an Economy System
-    [ ] Credits Balance
+    [X] Credits Balance
     [ ] Games using Credits
         [ ] Blackjack
         [ ] Betting on RNG Number
         [ ] Integrate Coin flip
     [ ] Credit Trading System
     [ ] Daily Balance Claim
+
+[X] Invite Command

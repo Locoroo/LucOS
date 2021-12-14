@@ -32,7 +32,6 @@ export default {
         })
       }
       
-
       // Define Object
       // const myData = {
       //   name: 'TestName',
@@ -46,10 +45,6 @@ export default {
       // Load Object from DB
       // const getIt = await db.get("Test");
       // const parsedData = JSON.parse(getIt);
-
-
-
-      
 
     },
 
