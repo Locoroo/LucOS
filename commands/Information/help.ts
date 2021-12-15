@@ -21,7 +21,8 @@ export default {
             .addFields([
                 {
                     name: 'Entertainment Commands:',
-                    value: `**/coinflip** - Flips a coin that lands on either Heads or Tails.`
+                    value: `**Bot AI** - _Requires you to add a channel named "**bot-ai**"! Go ahead and talk with the bot there._
+                    **/coinflip** - Flips a coin that lands on either Heads or Tails.`
                 },
                 {
                     name: 'Information Commands:',
@@ -36,7 +37,7 @@ export default {
                     value: `**/clear <amount>** - Clears a specific amount of messages in a channel.`
                 }
             ])
-            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/11/21')
+            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/14/21')
         
         interaction.reply({
             embeds: [embed],

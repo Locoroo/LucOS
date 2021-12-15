@@ -4,6 +4,8 @@ import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const axios = require('axios')
+
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -13,7 +15,7 @@ app.get("/", (req: any, res: any) => {
         res.sendFile(path.join(__dirname + "/express/src/" + "index.html"))
 })
 app.listen(port, () => {
-    console.log(`[EXPRESS]: Listen on port ${port}`)
+    console.log(`[EXPRESS] Listen on port ${port}`)
 })
 
 // Intents tells Discord what information it needs to use.
@@ -55,6 +57,7 @@ client.on('ready', () => {
 
 })
 
+// Anti Crash
 process.on("unhandledRejection", (reason, p) => {
     console.log(" [AntiCrash] Unhandled Rejection/Catch");
     console.log(reason, p);
@@ -72,9 +75,29 @@ process.on("multipleResolves", (type, promise, reason) => {
     console.log(type, promise, reason);
 });
 
+// AI Chat
+client.on("messageCreate", async(message) => {
+    const findChannel = message.guild?.channels.cache.find(channel => channel.name === "bot-ai");
+    if (findChannel === undefined) return; // Check if channel is undefined
+    if (findChannel.id !== message.channelId) return; // Check if Channel ID is same as "aichat" channel ID
+    if (!findChannel || message.author.bot) return; // Check if there's a channel named 'aichat' and ignore bot's own messages.
+    if (message.attachments.size > 0) return;
+    
+    // API
+    const baseUrl = `https://api.monkedev.com/fun/chat`;
+    const res = await axios.get(`${baseUrl}?msg=${encodeURIComponent(message.content)}&uid=${message.author.id}&key=dGlrqULK8mZYSTPyhHT56lkUT`);
+    
+    // Response
+    const today = new Date();
+    const time = `${today.getHours()}:${today.getMinutes()} - ${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
+
+    message.channel.send(res.data.response)
+    console.log(`[AIChat] ${time} | ${message.author.tag} said "${message.content}" and bot responded with: "${res.data.response}"`)
+})
+
 // Whenever an interaction occurs, run this:
 client.on('interactionCreate', interaction => {
-    const channel = interaction.guild?.channels.cache.get(`${interaction?.channelId}`);
+    let channel = interaction.guild?.channels.cache.get(`${interaction?.channelId}`);
     const today = new Date();
     const time = `${today.getHours()}:${today.getMinutes()} - ${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
     console.log(`[SlashCMD] ${time} | ${interaction.user.tag} used an interaction at "${interaction.guild?.name}" in #${channel?.name}`)
