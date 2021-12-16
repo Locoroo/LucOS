@@ -90,7 +90,7 @@ export default {
           }
         ])
         .setColor(color)
-        .setThumbnail('https://i.imgur.com/NjCIDcw.png')
+        .setThumbnail('https://i.imgur.com/iLBllNb.png')
         .setFooter(footer)
         .setTimestamp(Date.now())
       }
@@ -116,7 +116,7 @@ export default {
           }
         ])
         .setColor(color)
-        .setThumbnail('https://i.imgur.com/2dkYofN.png')
+        .setThumbnail('https://i.imgur.com/SrIYFfq.png')
         .setFooter(footer)
         .setTimestamp(Date.now())
       }
@@ -137,7 +137,7 @@ export default {
           }
         ])
         .setColor(color)
-        .setThumbnail('https://i.imgur.com/OlP5cAW.png')
+        .setThumbnail('https://i.imgur.com/hBhTWpL.png')
         .setFooter(footer)
         .setTimestamp(Date.now())
       }
@@ -163,16 +163,14 @@ export default {
           }
         ])
         .setColor(color)
-        .setThumbnail('https://i.imgur.com/2dkYofN.png')
+        .setThumbnail('https://i.imgur.com/SrIYFfq.png')
         .setFooter(footer)
         .setTimestamp(Date.now())
       }
 
       mainMenu = createEmbed(credits.balance, credits.bank)
-      await interaction.reply({
-      components: [defaultMenu],
-      embeds: [mainMenu]
-      })
+      const msg = await interaction.reply({ components: [defaultMenu], embeds: [mainMenu], fetchReply: true })
+      console.log(msg.id)
 
       // Filter who pressed the button
       const filter = (btnInt: MessageComponentInteraction) => {
@@ -187,7 +185,7 @@ export default {
       // On collect, run:
       collector.on('collect', async (BtnPressed: MessageComponentInteraction) => {
 
-        console.log(credits);
+        // console.log(credits);
 
         // Check if they can Deposit or Withdraw
         canDeposit = credits.balance > 0

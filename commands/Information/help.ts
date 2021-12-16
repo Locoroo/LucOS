@@ -30,6 +30,7 @@ export default {
                     **/invite** - Shows an invite link to invite the bot to your server.
                     **/botInfo** - Displays information about the bot itself.
                     **/guildInfo** - Displays information about the server you\'re in.
+                    **/profile <user>** - Show's information about a user's profile. Leave black to show your own profile.
                     **/avatar <user>** - Displays a specific user's avatar. Leave blank to show your own avatar.`
                 },
                 {
@@ -37,7 +38,7 @@ export default {
                     value: `**/clear <amount>** - Clears a specific amount of messages in a channel.`
                 }
             ])
-            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/14/21')
+            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/15/21')
         
         interaction.reply({
             embeds: [embed],

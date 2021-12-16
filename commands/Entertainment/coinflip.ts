@@ -50,14 +50,14 @@ export default {
             .setTitle(`${interaction.user.username} flipped a coin!`)
             .setColor('LIGHT_GREY')
             .setDescription('Coin landed on: **TAILS**')
-            .setThumbnail('https://i.imgur.com/mdLEHjx.png')
+            .setThumbnail('attachment://tails.png')
             .setFooter(`Heads: ${flip.heads}      |       Tails: ${flip.tails}      |       Total Flips: ${flipTotal}`)
         
         const headsEmbed = new MessageEmbed()
             .setTitle(`${interaction.user.username} flipped a coin!`)
             .setColor('GOLD')
             .setDescription('Coin landed on: **HEADS**')
-            .setThumbnail('https://i.imgur.com/GXl4S9N.png')
+            .setThumbnail('attachment://heads.png')
             .setFooter(`Heads: ${flip.heads}      |       Tails: ${flip.tails}      |       Total Flips: ${flipTotal}`)
 
             
@@ -66,12 +66,14 @@ export default {
             case 1: {
                 interaction.reply({
                     embeds: [tailsEmbed],
+                    files: ['./images/tails.png']
                 })
                 break;
             }
             case 2: {
                 interaction.reply({
                     embeds: [headsEmbed],
+                    files: ['./images/heads.png']
                 })
                 break;
             }
