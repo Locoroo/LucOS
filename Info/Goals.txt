@@ -5,8 +5,8 @@
 
 [X] Help command
 
-[ ] Profiles
-    [ ] User Profile
+[X] Profiles
+    [X] User Profile
     [X] Server Profile
     [X] Bot Profile
 
@@ -19,7 +19,7 @@
 [X] Message Clear
     [ ] Delete only a specific user's messages
 
-[ ] Say command
+[X] Say command
 
 [X] Coin Flip
     [X] Store information on how many flips have ocurred

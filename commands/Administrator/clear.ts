@@ -11,7 +11,8 @@ export default {
 
     minArgs: 1,
     maxArgs: 1,
-    expectedArgs: '[amount]',
+    expectedArgs: '<amount>',
+    expectedArgsTypes: ['NUMBER'],
 
     slash: true,
     guildOnly: true,
@@ -19,19 +20,25 @@ export default {
     // Function that runs whenever the command is ran
     callback: async ({ interaction, channel, args }) => {
         const amount = parseInt(args.shift()!)
-        // const amount = args.length ? parseInt(args.shift()!) : 1
         
-        const { size } = await channel.bulkDelete(amount, true);
-
-        interaction.reply({
-            content: `Deleted ${amount} message(s).`  
-        })
+        if (isNaN(amount)) {
+            interaction.reply({ 
+                content: 'Please input a valid number!', 
+                ephemeral: true 
+            })
+        } else {
+            channel.bulkDelete(amount, true);
+            interaction.reply({
+                content: `Deleted ${amount} message(s).`  
+            })
+            setTimeout(() => {
+                interaction.deleteReply()
+            }, 5000)
+        }
+        
         const today = new Date();
         const time = `${today.getHours()}:${today.getMinutes()} - ${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
         console.log(`[SlashCMD] ${time} | ${interaction.user.tag} cleared ${amount} message(s) at "${interaction.guild?.name}" in ChID: ${interaction.channelId}`)
-        setTimeout(() => {
-            interaction.deleteReply()
-        }, 5000)
     },
 
 } as ICommand
