@@ -35,10 +35,13 @@ export default {
                 },
                 {
                     name: 'Moderation Commands:',
-                    value: `**/clear <amount>** - Clears a specific amount of messages in a channel.`
+                    value: `**Logs** - _If you want these actions to be logged in a channel, you must create a channel named "**logs**"_.
+                    **/ban <user> <reason>** - Ban a user from the server.
+                    **/kick <user> <reason>** - Kick a user from the server.
+                    **/clear <amount>** - Clears a specific amount of messages in a channel.`
                 }
             ])
-            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/15/21')
+            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/18/21')
         
         interaction.reply({
             embeds: [embed],

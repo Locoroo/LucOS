@@ -24,10 +24,10 @@
 [X] Coin Flip
     [X] Store information on how many flips have ocurred
 
-[ ] Make Basic Admin commands
-    [ ] Ban
-    [ ] Kick
-    [ ] Make them be logged in a channel named 'logs'
+[X] Make Basic Admin commands
+    [X] Ban
+    [X] Kick
+    [X] Make them be logged in a channel named 'logs'
 
 [ ] Make an Economy System
     [X] Credits Balance
