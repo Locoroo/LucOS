@@ -43,12 +43,6 @@ export default {
         // Ban the target
         target.ban({days: 7, reason: reason})
 
-        // const imgArray = ['./images/kick.png', './images/kickalt.png']
-        // const attachArray = ['attachment://kick.png', 'attachment://kickalt.png']
-
-        // const max = 2;
-        // const x = Math.floor(Math.random() * max + 1);
-
         const banEmbed = new MessageEmbed()
             .setTitle(`**${target.user.tag} was banned from the server.**`)
             .addField('**Reason:**', reason)
