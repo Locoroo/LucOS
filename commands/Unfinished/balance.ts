@@ -1,8 +1,8 @@
-import { MessageEmbed, MessageComponentInteraction, MessageActionRow, MessageButton } from "discord.js";
+import { MessageEmbed, MessageComponentInteraction, MessageActionRow, MessageButton, TextChannel } from "discord.js";
 import { ICommand } from "wokcommands";
 const Database = require("@replit/database")
 const db = new Database()
-
+let msgID: any;
 export default {
     // Information about the command.
     category: 'Economy',
@@ -13,12 +13,18 @@ export default {
     testOnly: true,
 
     // Function that runs whenever the command is ran
-    callback: async ({ interaction, client, channel }) => {
+    callback: async ({ interaction, guild, client, channel }) => {
+
+      // Delete previous interaction
+      try {
+        interaction.channel?.messages.fetch(msgID).then(int => int.delete())
+      } catch (error) {}
+      
        
       let currencyIcon = `<:Credits:918484129153187881>`
 
       // Get User Info from Database
-      let data = await db.get(`Credits_${interaction.user?.id}`);
+      let data = await db.get(`User_${interaction.user?.id}`);
   
       let acc;
 
@@ -170,7 +176,11 @@ export default {
 
       mainMenu = createEmbed(credits.balance, credits.bank)
       const msg = await interaction.reply({ components: [defaultMenu], embeds: [mainMenu], fetchReply: true })
-      console.log(msg.id)
+      // Save the Data
+      // msgID[interaction.guild?.id] = msg.id
+      msgID = msg.id
+      const savedData = JSON.stringify(credits);
+      await db.set(`User_${credits.id}`, `${savedData}`);
 
       // Filter who pressed the button
       const filter = (btnInt: MessageComponentInteraction) => {
@@ -184,9 +194,7 @@ export default {
 
       // On collect, run:
       collector.on('collect', async (BtnPressed: MessageComponentInteraction) => {
-
-        // console.log(credits);
-
+        try {
         // Check if they can Deposit or Withdraw
         canDeposit = credits.balance > 0
         canWithdraw = credits.bank > 0
@@ -283,7 +291,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -312,7 +320,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -341,7 +349,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -372,7 +380,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -401,7 +409,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -430,7 +438,7 @@ export default {
 
               // Save The Data
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
               break;
             } else {
 
@@ -453,7 +461,7 @@ export default {
               embeds: [bankerEmbed],
               components: [bankerRow]})
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
             break;
             } else {
               bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
@@ -471,7 +479,7 @@ export default {
               embeds: [bankerEmbed],
               components: [bankerRow]})
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
             break;
             } else {
               bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
@@ -489,7 +497,7 @@ export default {
               embeds: [bankerEmbed],
               components: [bankerRow]})
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
             break;
             } else {
               bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
@@ -507,7 +515,7 @@ export default {
               embeds: [bankerEmbed],
               components: [bankerRow]})
               const savedData = JSON.stringify(credits);
-              await db.set(`Credits_${credits.id}`, `${savedData}`);
+              await db.set(`User_${credits.id}`, `${savedData}`);
             break;
             } else {
               bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
@@ -534,6 +542,7 @@ export default {
             }
           }
         }
+      } catch (error) {}
       })
     },
 
