@@ -53,7 +53,7 @@ export default {
         
         interaction.reply({
             embeds: [banEmbed],
-            files: ['./images/ban.png']
+            files: ['./images/admin/ban.png']
         })
 
         // Log
@@ -84,7 +84,7 @@ export default {
 
         findChannel.send({
             embeds: [banLogEmbed],
-            files: ['./images/info.png']
+            files: ['./images/admin/info.png']
         })
 
         const today = new Date();

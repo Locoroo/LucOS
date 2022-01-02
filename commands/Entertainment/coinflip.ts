@@ -24,7 +24,8 @@ export default {
                 flip: {
                     heads: 0,
                     tails: 0
-                }
+                },
+                lastBalMsgID: '<msgID>'
             }
         } else {
             server = JSON.parse(data);
@@ -53,14 +54,14 @@ export default {
             .setColor('LIGHT_GREY')
             .setDescription('Coin landed on: **TAILS**')
             .setThumbnail('attachment://tails.png')
-            .setFooter(`Heads: ${server.flip.heads}      |       Tails: ${server.flip.tails}      |       Total Flips: ${flipTotal}`)
+            .setFooter(`Paws: ${server.flip.heads}      |       Tails: ${server.flip.tails}      |       Total Flips: ${flipTotal}`)
         
         const headsEmbed = new MessageEmbed()
             .setTitle(`${interaction.user.username} flipped a coin!`)
             .setColor('GOLD')
-            .setDescription('Coin landed on: **HEADS**')
-            .setThumbnail('attachment://heads.png')
-            .setFooter(`Heads: ${server.flip.heads}      |       Tails: ${server.flip.tails}      |       Total Flips: ${flipTotal}`)
+            .setDescription('Coin landed on: **PAWS**')
+            .setThumbnail('attachment://paws.png')
+            .setFooter(`Paws: ${server.flip.heads}      |       Tails: ${server.flip.tails}      |       Total Flips: ${flipTotal}`)
 
             
         // Send Results
@@ -68,14 +69,14 @@ export default {
             case 1: {
                 interaction.reply({
                     embeds: [tailsEmbed],
-                    files: ['./images/tails.png']
+                    files: ['./images/coin/tails.png']
                 })
                 break;
             }
             case 2: {
                 interaction.reply({
                     embeds: [headsEmbed],
-                    files: ['./images/heads.png']
+                    files: ['./images/coin/paws.png']
                 })
                 break;
             }

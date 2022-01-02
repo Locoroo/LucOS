@@ -2,7 +2,7 @@ import { MessageEmbed, MessageComponentInteraction, MessageActionRow, MessageBut
 import { ICommand } from "wokcommands";
 const Database = require("@replit/database")
 const db = new Database()
-let msgID: any;
+
 export default {
     // Information about the command.
     category: 'Economy',
@@ -10,50 +10,80 @@ export default {
 
     slash: true,
     guildOnly: true,
-    testOnly: true,
 
     // Function that runs whenever the command is ran
     callback: async ({ interaction, guild, client, channel }) => {
 
+      // Get Server Info from Database
+      let data1 = await db.get(`Guild_${interaction.guild?.id}`);
+        
+      let server;
+      
+      if (data1 === null) {
+          server = {
+              flip: {
+                  heads: 0,
+                  tails: 0
+              },
+              lastBalMsgID: '<msgID>'
+          }
+      } else {
+          server = JSON.parse(data1);
+      }
+
       // Delete previous interaction
       try {
-        interaction.channel?.messages.fetch(msgID).then(int => int.delete())
+        interaction.channel?.messages.fetch(server.lastBalMsgID).then(int => int.delete())
       } catch (error) {}
-      
        
       let currencyIcon = `<:Credits:918484129153187881>`
 
       // Get User Info from Database
-      let data = await db.get(`User_${interaction.user?.id}`);
+      let data2 = await db.get(`User_${interaction.user?.id}`);
   
       let acc;
 
-      if (data === null) {
+      if (data2 === null) {
           acc = {
               name: interaction.user.username,
               id: interaction.user?.id,
               balance: 500,
-              bank: 0
+              bank: 0,
+              dailyCheck: Date.now()          
           }
       } else {
-          acc = JSON.parse(data);
+          acc = JSON.parse(data2);
       }
 
       let credits = {
         name: acc.name,
         id: acc.id,
         balance: acc.balance,
-        bank: acc.bank
+        bank: acc.bank,
+        daily: acc.dailyCheck
       }
 
+      // Daily Claim
+      let check = credits.daily;
+      const timeout = 5000// 86400000;
+      let canClaim: boolean;
+      let timeLeft: any;
+      if (timeout - (Date.now() - check) > 0) { 
+        canClaim = false 
+        const ms = require('pretty-ms');
+        timeLeft = ms(timeout - (Date.now() - check));
+      } else { canClaim = false } // < CHANGE THIS BACK TO TRUE TO BE ABLE TO ENABLE THE BUTTON (TEMPORARY DISABLE TO NO ONE CAN EXPLOIT INFINITE CURRENCY)
+
       console.log(credits);
+      console.log(`Time Left: ${timeLeft} , Can Claim? ${canClaim}, Check: ${check}`)
+
 
       // Function to make Buttons quicker
       function newButton(id: string, label: string, style: any, disabled = false) {
         return new MessageButton().setCustomId(id).setLabel(label).setStyle(style).setDisabled(disabled);
       }
 
-      // Check if they can Deposit or Withdraw
+      // Check if they can Deposit Withdraw
       let canDeposit = credits.balance > 0
       let canWithdraw = credits.bank > 0
 
@@ -62,22 +92,12 @@ export default {
         const defaultMenu = new MessageActionRow().addComponents(
           newButton('deposit', 'Deposit', 'SECONDARY', !canDeposit),
           newButton('withdraw', 'Withdraw', 'SECONDARY', !canWithdraw),
-          newButton('banker', 'Banker Mode', 'DANGER')
-        );
-
-        // Banker Row
-        const bankerRow = new MessageActionRow().addComponents(
-          newButton('add10', `+10`, 'PRIMARY'),
-          newButton('add100', `+100`, 'PRIMARY'),
-          newButton('take100', `-100`, 'PRIMARY'),
-          newButton('take10', `-10`, 'PRIMARY'),
-          newButton('cancel2', `Back`, 'DANGER')
+          newButton('daily', 'Claim Daily', 'SUCCESS', !canClaim)
         );
 
       let mainMenu;
       let depEmbed;
       let withEmbed;
-      let bankerEmbed
 
       // Embeds
       function createEmbed(bal: number, bank: number, color: any = "GOLD", footer = 'Select an option if you would like to manage your balance.') { 
@@ -126,27 +146,6 @@ export default {
         .setFooter(footer)
         .setTimestamp(Date.now())
       }
-      function createBankerEmbed(bal: number, color: any = "ORANGE", footer = 'Select how much you want to take or add.') {
-        return new MessageEmbed()
-        .setTitle(`${credits.name}'s Account Balance:`)
-        .setDescription('Banker Mode: _Only the Bot Owner can access this._')
-        .addFields([
-          {
-            name: 'Balance:',
-            value: `${currencyIcon} ${bal}`,
-            inline: true
-          },
-          {
-            name: 'Banker:',
-            value: `Locoroo`!,
-            inline: true
-          }
-        ])
-        .setColor(color)
-        .setThumbnail('https://i.imgur.com/hBhTWpL.png')
-        .setFooter(footer)
-        .setTimestamp(Date.now())
-      }
       function createWithEmbed(bal: number, bank: number, color: any = "GOLD", footer = 'Select the amount you would like to withdraw.') {
         return new MessageEmbed()
         .setTitle(`${interaction.user.username}'s Account Balance:`)
@@ -174,28 +173,42 @@ export default {
         .setTimestamp(Date.now())
       }
 
+      // Send the reply and store ID
       mainMenu = createEmbed(credits.balance, credits.bank)
       const msg = await interaction.reply({ components: [defaultMenu], embeds: [mainMenu], fetchReply: true })
-      // Save the Data
-      // msgID[interaction.guild?.id] = msg.id
-      msgID = msg.id
-      const savedData = JSON.stringify(credits);
-      await db.set(`User_${credits.id}`, `${savedData}`);
+
+      // Save the Server Data
+      server.lastBalMsgID = msg.id
+      const savedData2 = JSON.stringify(server);
+      await db.set(`Guild_${interaction.guild?.id}`, `${savedData2}`);
+
+      // Save the User Data
+      const savedData1 = JSON.stringify(credits);
+      await db.set(`User_${credits.id}`, `${savedData1}`);
 
       // Filter who pressed the button
       const filter = (btnInt: MessageComponentInteraction) => {
-        return interaction.user.id === btnInt.user.id || btnInt.user.id === '270600189859856385'
+        return interaction.user.id === btnInt.user.id //|| btnInt.user.id === '270600189859856385'
       }
 
       // Define the collector
       const collector = channel.createMessageComponentCollector({
         filter,
+        time: 1000 * 120
       })
 
       // On collect, run:
       collector.on('collect', async (BtnPressed: MessageComponentInteraction) => {
         try {
-        // Check if they can Deposit or Withdraw
+
+        // Check if reward can be claimed
+        if (timeout - (Date.now() - check) > 0) { 
+          canClaim = false 
+          const ms = require('pretty-ms');
+          timeLeft = ms(timeout - (Date.now() - check));
+        } else { canClaim = true }
+      
+        // Check if they can Deposit, Withdraw or Claim
         canDeposit = credits.balance > 0
         canWithdraw = credits.bank > 0
 
@@ -213,7 +226,7 @@ export default {
         const menu = new MessageActionRow().addComponents(
           newButton('deposit', 'Deposit', 'SECONDARY', !canDeposit),
           newButton('withdraw', 'Withdraw', 'SECONDARY', !canWithdraw),
-          newButton('banker', 'Banker Mode', 'DANGER')
+          newButton('daily', 'Claim Daily', 'SUCCESS', !canClaim)
         );
 
         // Deposit Row
@@ -250,20 +263,17 @@ export default {
             })
             break;
           }
-          case 'banker': {
-            if (BtnPressed.user.id === '270600189859856385') {
-              bankerEmbed = createBankerEmbed(credits.balance)
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-            break;
-            } else {
-              mainMenu = createEmbed(credits.balance, credits.bank, 'RED', 'You are not allowed to access the Banker Controls!')
-              await BtnPressed.update({
+          case 'daily': {
+            credits.balance = credits.balance + 100;
+            mainMenu = createEmbed(credits.balance, credits.bank, "GREEN", 'Claimed your Daily Reward! Check back in 24H.');
+            await BtnPressed.update({
               embeds: [mainMenu],
-              components: [menu]})
+              components: [menu]
+            })
+            credits.daily = Date.now()
+            const savedData = JSON.stringify(credits);
+            await db.set(`User_${credits.id}`, `${savedData}`);
             break;
-            }
           }
           case 'cancel': {
             mainMenu = createEmbed(credits.balance, credits.bank)
@@ -451,97 +461,8 @@ export default {
               break;
             }
           }
-        
-        // Banker Row
-          case 'add10': {
-            if (BtnPressed.user.id === '270600189859856385') {
-              credits.balance = credits.balance + 10;
-              bankerEmbed = createBankerEmbed(credits.balance);
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-              const savedData = JSON.stringify(credits);
-              await db.set(`User_${credits.id}`, `${savedData}`);
-            break;
-            } else {
-              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-            break;
-            }
-          }
-          case 'add100': {
-            if (BtnPressed.user.id === '270600189859856385') {
-              credits.balance = credits.balance + 100;
-              bankerEmbed = createBankerEmbed(credits.balance);
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-              const savedData = JSON.stringify(credits);
-              await db.set(`User_${credits.id}`, `${savedData}`);
-            break;
-            } else {
-              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-            break;
-            }
-          }
-          case 'take10': {
-            if (BtnPressed.user.id === '270600189859856385') {
-              credits.balance = credits.balance - 10;
-              bankerEmbed = createBankerEmbed(credits.balance);
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-              const savedData = JSON.stringify(credits);
-              await db.set(`User_${credits.id}`, `${savedData}`);
-            break;
-            } else {
-              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-            break;
-            }
-          }
-          case 'take100': {
-            if (BtnPressed.user.id === '270600189859856385') {
-              credits.balance = credits.balance - 100;
-              bankerEmbed = createBankerEmbed(credits.balance);
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-              const savedData = JSON.stringify(credits);
-              await db.set(`User_${credits.id}`, `${savedData}`);
-            break;
-            } else {
-              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Stop trying...')
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-            break;
-            }
-          }
-          case 'cancel2': {
-            if (BtnPressed.user.id === '270600189859856385') {
-              mainMenu = createEmbed(credits.balance, credits.bank)
-              await BtnPressed.update({
-              embeds: [mainMenu],
-              components: [menu]
-            })
-            break;
-            } else {
-              bankerEmbed = createBankerEmbed(credits.balance, 'RED', 'Only the Bot Owner can press these buttons. Don\'t do that...')
-              await BtnPressed.update({
-              embeds: [bankerEmbed],
-              components: [bankerRow]})
-            break;
-            }
-          }
         }
+
       } catch (error) {}
       })
     },

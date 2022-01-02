@@ -43,7 +43,7 @@ export default {
         // Kick the target
         target.kick(reason)
 
-        const imgArray = ['./images/kick.png', './images/kickalt.png']
+        const imgArray = ['./images/admin/kick.png', './images/admin/kickalt.png']
         const attachArray = ['attachment://kick.png', 'attachment://kickalt.png']
         let y;
 
@@ -92,7 +92,7 @@ export default {
 
         findChannel.send({
             embeds: [banLogEmbed],
-            files: ['./images/info.png']
+            files: ['./images/admin/info.png']
         })
 
         const today = new Date();

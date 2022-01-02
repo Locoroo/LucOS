@@ -22,7 +22,12 @@ export default {
                 {
                     name: 'Entertainment Commands:',
                     value: `**Bot AI** - _Requires you to add a channel named "**bot-ai**"! Go ahead and talk with the bot there._
-                    **/coinflip** - Flips a coin that lands on either Heads or Tails.`
+                    **/coinflip** - Flips a coin that lands on either Heads or Tails.
+                    **/rcolor** - Picks a random color for you.`
+                },
+                {
+                    name: 'Economy Commands:',
+                    value: `**/balance** - Displays your current credits balance.`
                 },
                 {
                     name: 'Information Commands:',
@@ -41,7 +46,7 @@ export default {
                     **/clear <amount>** - Clears a specific amount of messages in a channel.`
                 }
             ])
-            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/18/21')
+            .setFooter('Bot Created By: Locoroo#1984 | Last Updated: 12/26/21')
         
         interaction.reply({
             embeds: [embed],
