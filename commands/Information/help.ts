@@ -23,7 +23,8 @@ export default {
                     name: 'Entertainment Commands:',
                     value: `**Bot AI** - _Requires you to add a channel named "**bot-ai**"! Go ahead and talk with the bot there._
                     **/coinflip** - Flips a coin that lands on either Heads or Tails.
-                    **/rcolor** - Picks a random color for you.`
+                    **/rcolor** - Picks a random color for you.
+                    **/8ball <question>** - Ask the Magic 8 Ball a question and get answers.`
                 },
                 {
                     name: 'Economy Commands:',

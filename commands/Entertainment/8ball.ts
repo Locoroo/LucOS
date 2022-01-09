@@ -7,7 +7,6 @@ export default {
     category: 'Entertainment',
     description: 'Ask the 8ball a question to find answers.',
 
-    testOnly: true,
     slash: true,
     
     expectedArgs: '<question>',
